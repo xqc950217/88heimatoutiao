@@ -13,11 +13,11 @@
         <el-form-item prop="mobile">
           <!-- 放置表单组件 -->
           <!-- 手机号 -->
-          <el-input v-model="loginForm.mobile"></el-input>
+          <el-input v-model="loginForm.mobile" placeholder="请输入您的手机号"></el-input>
         </el-form-item>
         <el-form-item prop="code">
           <!-- 验证码 -->
-          <el-input v-model="loginForm.code" style="width:280px"></el-input>
+          <el-input v-model="loginForm.code" style="width:280px" placeholder="请输入您的验证码"></el-input>
           <el-button style="float:right" plain>发送验证码</el-button>
         </el-form-item>
         <el-form-item prop="checked">
@@ -77,7 +77,9 @@ export default {
             data: this.loginForm,
             method: 'post'
           }).then(result => {
-            console.log(result.data)
+            // console.log(result.data)
+            // 储存到本地   result.data.data.token  获取token令牌
+            window.localStorage.setItem('user-token', result.data.data.token)
           })
         }
       })
