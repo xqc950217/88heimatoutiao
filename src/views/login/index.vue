@@ -80,6 +80,14 @@ export default {
             // console.log(result.data)
             // 储存到本地   result.data.data.token  获取token令牌
             window.localStorage.setItem('user-token', result.data.data.token)
+            // 跳转到本地
+            this.$router.push('/home')
+          }).catch(() => {
+            // 提示消息
+            this.$message({
+              type: 'warning',
+              message: '手机号或者验证码错误'
+            })
           })
         }
       })
