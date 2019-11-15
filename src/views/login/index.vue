@@ -81,7 +81,7 @@ export default {
             // 储存到本地   result.data.data.token  获取token令牌
             window.localStorage.setItem('user-token', result.data.data.token)
             // 跳转到本地
-            this.$router.push('/home')
+            this.$router.push('/')
           }).catch(() => {
             // 提示消息
             this.$message({

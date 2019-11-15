@@ -18,6 +18,7 @@
         <!-- 二级菜单 -->
         <el-submenu index="1">
           <!-- 具名插槽 -->
+          <!-- 给你的菜单项设置 index，导航到具体的页面路径 -->
           <template slot="title">内容管理</template>
           <el-menu-item index="/publish">内容发布</el-menu-item>
           <el-menu-item index="/article">内容列表</el-menu-item>
