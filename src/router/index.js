@@ -26,7 +26,7 @@ const routes = [
         path: '/article',
         component: Article
       },
-      { // 文章发布
+      { // 内容发布
         path: '/publish',
         component: Publish
 
