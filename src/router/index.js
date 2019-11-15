@@ -76,6 +76,8 @@ router.beforeEach((to, from, next) => {
     next()
   } else {
     next('/login')
+    // 在登录页面为非登录状态的时候 手动终止进度条
+    Nprogress.done()
   }
 })
 // 路由导航器结束以后触发全局后置钩子
