@@ -44,29 +44,47 @@
         <span>共找到59806条符合条件的内容</span>
       </div>
        <el-table
-      :data="tableData"
+      :data="articles"
       style="width: 100%">
       <el-table-column
         prop="date"
         label="封面"
         width="180">
+        <!-- 自定义表格列
+        在 template 上声明 slot-scope="scope" ，然后就可以通过 scope.row 获取遍历项
+        scope.row 就相当于我们自己 v-for 的 item -->
+        <template slot-scope="scope">
+          <img width="50"  :src="scope.row.cover.images[0]">
+        </template>
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="title"
         label="标题"
         width="180">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="status"
         label="状态">
+        <template slot-scope="scope">
+            <!-- <span>{{articleStatus[scope.row.status].label}}</span> -->
+            <el-tag
+            :type="articleStatus[scope.row.status].type"
+            >
+             {{articleStatus[scope.row.status].label}}
+            </el-tag>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="pubdate"
         label="发布日期">
       </el-table-column>
       <el-table-column
         prop="address"
         label="操作">
+        <template>
+          <el-button type="danger" size="mini">删除</el-button>
+          <el-button type="primary" size="mini">修改</el-button>
+        </template>
       </el-table-column>
     </el-table>
     </el-card>
@@ -74,6 +92,7 @@
 </template>
 
 <script>
+
 export default {
   // 建议给每个组建起一个名字 好找
   name: 'article',
@@ -87,25 +106,51 @@ export default {
         end_pubdate: ''
       },
       rangeDate: '',
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }]
+      articles: [],
+      articleStatus: [
+        {
+          type: '',
+          label: '草稿'
+        },
+        {
+          type: 'warning',
+          label: '待审核'
+        },
+        {
+          type: 'success',
+          label: '审核通过'
+        },
+        {
+          type: 'danger',
+          label: '审核失败'
+        },
+        {
+          type: 'info',
+          label: '已删除'
+        }
+      ]
+    }
+  },
+  created () {
+    this.loadArticles()
+  },
+  methods: {
+    loadArticles () {
+      const token = window.localStorage.getItem('user-token')
+      this.$axios({
+        method: 'GET',
+        url: '/articles',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }).then(res => {
+        this.articles = res.data.data.results
+      }).catch(err => {
+        console.log(err, '获取数据失败')
+      })
     }
   }
+
 }
 </script>
 
