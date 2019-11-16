@@ -41,7 +41,7 @@
     <!-- 文章列表 -->
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>共找到59806条符合条件的内容</span>
+        <span>共找到{{totalCount}}条符合条件的内容</span>
       </div>
        <el-table
       :data="articles"
@@ -81,13 +81,21 @@
       <el-table-column
         prop="address"
         label="操作">
-        <template>
+        <template >
           <el-button type="danger" size="mini">删除</el-button>
           <el-button type="primary" size="mini">修改</el-button>
         </template>
       </el-table-column>
     </el-table>
     </el-card>
+    <!-- 分页 -->
+    <el-pagination
+     background
+     layout="prev, pager, next"
+     :total="totalCount"
+     @current-change="onPageChange"
+     >
+</el-pagination>
   </div>
 </template>
 
@@ -128,26 +136,41 @@ export default {
           type: 'info',
           label: '已删除'
         }
-      ]
+      ],
+      totalCount: 0
     }
   },
   created () {
-    this.loadArticles()
+    // 初始化的时候加载第 1 页数据
+    this.loadArticles(1)
   },
   methods: {
-    loadArticles () {
+    loadArticles (page = 1) {
       const token = window.localStorage.getItem('user-token')
       this.$axios({
         method: 'GET',
         url: '/articles',
         headers: {
           Authorization: `Bearer ${token}`
+        },
+        // query参数用params传递
+        params: {
+          page,
+          per_page: 10 // 每页默认十条
+
         }
       }).then(res => {
+        // 更新文章列表数组
         this.articles = res.data.data.results
+        // 更新总记录数
+        this.totalCount = res.data.data.total_count
       }).catch(err => {
         console.log(err, '获取数据失败')
       })
+    },
+    // 页码改变调用函数
+    onPageChange (page) {
+      this.loadArticles(page)
     }
   }
 
