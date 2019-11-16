@@ -31,12 +31,10 @@
           <el-date-picker
             v-model="rangeDate"
             type="daterange"
-            align="right"
-            unlink-panels
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :picker-options="pickerOptions"
+            value-format="yyy-MM--dd"
           ></el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -121,7 +119,7 @@ export default {
         begin_pubdate: '',
         end_pubdate: ''
       },
-      rangeDate: '',
+      rangeDate: [],
       articles: [],
       articleStatus: [
         {
@@ -148,6 +146,7 @@ export default {
       totalCount: 0,
       loading: true,
       channels: []// 频道列表
+      // 时间
     }
   },
   created () {
@@ -172,7 +171,9 @@ export default {
           page,
           per_page: 10, // 每页默认十条
           // axios有个功能 当参数值为null的时候就不发送了
-          status: this.filterForm.status
+          status: this.filterForm.status,
+          begin_pubdate: this.rangeDate ? this.rangeDate[0] : null,
+          end_pubdate: this.rangeDate ? this.rangeDate[1] : null
         }
       }).then(res => {
         // 更新文章列表数组
