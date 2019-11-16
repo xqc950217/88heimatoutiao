@@ -6,19 +6,25 @@
       </div>
       <el-form ref="form" :model="form" label-width="80px">
         <el-form-item label="文章状态">
-          <el-radio-group v-model="filterFrom">
-            <el-radio label="全部"></el-radio>
-            <el-radio label="草稿"></el-radio>
-            <el-radio label="待审核"></el-radio>
-            <el-radio label="审核通过"></el-radio>
-            <el-radio label="审核失败"></el-radio>
+          <!-- 单选框组会把选中的radio的label同步给绑定的数据 -->
+          <el-radio-group v-model="filterForm.status">
+            <el-radio :label="null">全部</el-radio>
+            <el-radio label="0">草稿</el-radio>
+            <el-radio label="1">待审核</el-radio>
+            <el-radio label="2">审核通过</el-radio>
+            <el-radio label="3">审核失败</el-radio>
+            <el-radio label="4">已删除</el-radio>
           </el-radio-group>
         </el-form-item>
 
         <el-form-item label="频道列表">
-          <el-select placeholder="请选择" v-model="filterFrom.channel_id">
-            <el-option label="开发者资讯" value="shanghai"></el-option>
-            <el-option label="iOS" value="beijing"></el-option>
+          <el-select placeholder="请选择频道" v-model="filterForm.channel_id">
+            <el-option
+              :label="channel.name"
+              :value="channel.id"
+              v-for="channel in channels"
+              :key="channel.id"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="时间选择">
@@ -34,7 +40,7 @@
           ></el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">查询</el-button>
+          <el-button type="primary" @click="loadArticles(1)">查询</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -105,12 +111,12 @@
 
 export default {
   // 建议给每个组建起一个名字 好找
-  name: 'article',
+  name: 'article-list',
   data () {
     return {
       //    过滤表单数据
-      filterFrom: {
-        status: '',
+      filterForm: {
+        status: null,
         channel_id: '',
         begin_pubdate: '',
         end_pubdate: ''
@@ -140,15 +146,19 @@ export default {
         }
       ],
       totalCount: 0,
-      loading: true
+      loading: true,
+      channels: []// 频道列表
     }
   },
   created () {
     // 初始化的时候加载第 1 页数据
     this.loadArticles(1)
+    // 加载频道列表
+    this.loadChannels()
   },
   methods: {
     loadArticles (page = 1) {
+      // 加载前为要加载状态
       this.loading = true
       const token = window.localStorage.getItem('user-token')
       this.$axios({
@@ -160,8 +170,9 @@ export default {
         // query参数用params传递
         params: {
           page,
-          per_page: 10 // 每页默认十条
-
+          per_page: 10, // 每页默认十条
+          // axios有个功能 当参数值为null的时候就不发送了
+          status: this.filterForm.status
         }
       }).then(res => {
         // 更新文章列表数组
@@ -171,17 +182,33 @@ export default {
       }).catch(err => {
         console.log(err, '获取数据失败')
       }).finally(() => {
+        // 加载完成后 结束
         this.loading = false
       })
     },
     // 页码改变调用函数
     onPageChange (page) {
       this.loadArticles(page)
+    },
+    loadChannels () {
+      this.$axios({
+        method: 'GET',
+        url: '/channels'
+      }).then(res => {
+        this.channels = res.data.data.channels
+      }).catch(err => {
+        console.log(err, '获取数据失败')
+      })
     }
   }
 
 }
 </script>
 
-<style>
+<style scoped lang="less">
+.article {
+  .box-card {
+    margin-bottom: 20px;
+  }
+}
 </style>
