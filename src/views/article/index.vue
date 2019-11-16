@@ -44,6 +44,7 @@
         <span>共找到{{totalCount}}条符合条件的内容</span>
       </div>
        <el-table
+       v-loading="loading"
       :data="articles"
       style="width: 100%">
       <el-table-column
@@ -94,6 +95,7 @@
      layout="prev, pager, next"
      :total="totalCount"
      @current-change="onPageChange"
+     :disabled="loading"
      >
 </el-pagination>
   </div>
@@ -137,7 +139,8 @@ export default {
           label: '已删除'
         }
       ],
-      totalCount: 0
+      totalCount: 0,
+      loading: true
     }
   },
   created () {
@@ -146,6 +149,7 @@ export default {
   },
   methods: {
     loadArticles (page = 1) {
+      this.loading = true
       const token = window.localStorage.getItem('user-token')
       this.$axios({
         method: 'GET',
@@ -166,6 +170,8 @@ export default {
         this.totalCount = res.data.data.total_count
       }).catch(err => {
         console.log(err, '获取数据失败')
+      }).finally(() => {
+        this.loading = false
       })
     },
     // 页码改变调用函数
