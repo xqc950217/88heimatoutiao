@@ -86,8 +86,9 @@
       <el-table-column
         prop="address"
         label="操作">
-        <template >
-          <el-button type="danger" size="mini">删除</el-button>
+        <template slot-scope="scope">
+          <!-- 设置点击事件 -->
+          <el-button type="danger" size="mini" @click="onDelete(scope.row.id)">删除</el-button>
           <el-button type="primary" size="mini">修改</el-button>
         </template>
       </el-table-column>
@@ -145,7 +146,8 @@ export default {
       ],
       totalCount: 0,
       loading: true,
-      channels: []// 频道列表
+      channels: [], // 频道列表
+      page: 0 // 1.记录当前页码 添加page来储存当前页码
       // 时间
     }
   },
@@ -189,6 +191,8 @@ export default {
     },
     // 页码改变调用函数
     onPageChange (page) {
+      // 2.页码改变的时候 记录最新页码
+      this.page = page
       this.loadArticles(page)
     },
     loadChannels () {
@@ -199,6 +203,21 @@ export default {
         this.channels = res.data.data.channels
       }).catch(err => {
         console.log(err, '获取数据失败')
+      })
+    },
+    // 3.处理函数的时候删除文章 删除成功的时候重新加载页面
+    onDelete (articleId) {
+      this.$axios({
+        method: 'DELETE',
+        url: `articles/${articleId}`,
+        headers: {
+          Authorization: `Bearer ${window.localStorage.getItem('user-token')}`
+        }
+      }).then(res => {
+        // 删除成功 重新加载当前页码文章
+        this.loadArticles(this.page)
+      }).catch(err => {
+        console.log(err, '删除失败')
       })
     }
   }
