@@ -147,7 +147,7 @@ export default {
       totalCount: 0,
       loading: true,
       channels: [], // 频道列表
-      page: 0 // 1.记录当前页码 添加page来储存当前页码
+      page: 1 // 1.记录当前页码 添加page来储存当前页码
       // 时间
     }
   },
