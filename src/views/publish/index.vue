@@ -9,7 +9,14 @@
           <el-input v-model="article.title"></el-input>
         </el-form-item>
         <el-form-item label="内容">
-          <el-input type="textarea" v-model="article.content"></el-input>
+          <!-- <el-input type="textarea" v-model="article.content"></el-input>
+          -->
+          <!-- bidirectional data binding（双向数据绑定） -->
+          <quill-editor
+            v-model="article.content"
+            ref="myQuillEditor"
+            :options="editorOption"
+          ></quill-editor>
         </el-form-item>
         <!-- <el-form-item label="封面">
           <el-radio-group>
@@ -18,20 +25,19 @@
             <el-radio label="无图"></el-radio>
             <el-radio label="自动"></el-radio>
           </el-radio-group>
-        </el-form-item> -->
+        </el-form-item>-->
         <el-form-item label="频道">
           <el-select v-model="article.channel_id" placeholder="请选择频道">
             <el-option
-            :label="channel.name"
-             :value="channel.id"
-             v-for="channel in channels"
-             :key="channel.id"
-            >
-            </el-option>
+              :label="channel.name"
+              :value="channel.id"
+              v-for="channel in channels"
+              :key="channel.id"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button  type="primary " @click="onSubmit(false)">发表</el-button>
+          <el-button type="primary " @click="onSubmit(false)">发表</el-button>
           <el-button @click="onSubmit(true)">存入草稿</el-button>
         </el-form-item>
       </el-form>
@@ -40,8 +46,18 @@
 </template>
 
 <script>
+// 加载富文本编辑器的样式文件
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+// 加载富文本编辑器的核心组件
+import { quillEditor } from 'vue-quill-editor'
 export default {
   name: 'Publish',
+  components: {
+    // 注册局部组件
+    quillEditor
+  },
   data () {
     return {
       article: {
@@ -77,21 +93,25 @@ export default {
           draft
         },
         data: this.article
-      }).then(res => {
-        console.log(res, '恭喜添加成功')
-      }).catch(err => {
-        console.log(err, '保存失败')
       })
+        .then(res => {
+          console.log(res, '恭喜添加成功')
+        })
+        .catch(err => {
+          console.log(err, '保存失败')
+        })
     },
     loadChannels () {
       this.$axios({
         method: 'GET',
         url: '/channels'
-      }).then(res => {
-        this.channels = res.data.data.channels
-      }).catch(err => {
-        console.log(err, '获取失败')
       })
+        .then(res => {
+          this.channels = res.data.data.channels
+        })
+        .catch(err => {
+          console.log(err, '获取失败')
+        })
     }
   }
 }
