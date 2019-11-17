@@ -11,14 +11,14 @@
         <el-form-item label="内容">
           <el-input type="textarea" v-model="article.content"></el-input>
         </el-form-item>
-        <el-form-item label="封面">
+        <!-- <el-form-item label="封面">
           <el-radio-group>
             <el-radio label="单图"></el-radio>
             <el-radio label="三图"></el-radio>
             <el-radio label="无图"></el-radio>
             <el-radio label="自动"></el-radio>
           </el-radio-group>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="频道">
           <el-select v-model="article.channel_id" placeholder="请选择频道">
             <el-option
@@ -31,8 +31,8 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">发表</el-button>
-          <el-button>存入草稿</el-button>
+          <el-button  type="primary " @click="onSubmit(false)">发表</el-button>
+          <el-button @click="onSubmit(true)">存入草稿</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -60,8 +60,28 @@ export default {
     this.loadChannels()
   },
   methods: {
-    onSubmit () {
-      console.log('submit!')
+    onSubmit (draft) {
+      this.$message({
+        message: '恭喜你，添加成功',
+        type: 'success'
+      })
+      this.$axios({
+        method: 'POST',
+        url: '/articles',
+        // Header 参数
+        headers: {
+          Authorization: `Bearer ${window.localStorage.getItem('user-token')}`
+        },
+        // Query参数
+        params: {
+          draft
+        },
+        data: this.article
+      }).then(res => {
+        console.log(res, '恭喜添加成功')
+      }).catch(err => {
+        console.log(err, '保存失败')
+      })
     },
     loadChannels () {
       this.$axios({
