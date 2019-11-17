@@ -68,7 +68,8 @@ export default {
           images: []
         },
         channel_id: '',
-        channels: []
+        channels: [],
+        editorOption: {} // 富文本编辑器配置选项对象
       }
     }
   },
@@ -85,9 +86,9 @@ export default {
         method: 'POST',
         url: '/articles',
         // Header 参数
-        headers: {
-          Authorization: `Bearer ${window.localStorage.getItem('user-token')}`
-        },
+        // headers: {
+        //   Authorization: `Bearer ${window.localStorage.getItem('user-token')}`
+        // },
         // Query参数
         params: {
           draft

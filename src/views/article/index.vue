@@ -161,13 +161,13 @@ export default {
     loadArticles (page = 1) {
       // 加载前为要加载状态
       this.loading = true
-      const token = window.localStorage.getItem('user-token')
+      // const token = window.localStorage.getItem('user-token')
       this.$axios({
         method: 'GET',
         url: '/articles',
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`
+        // },
         // query参数用params传递
         params: {
           page,
@@ -209,10 +209,10 @@ export default {
     onDelete (articleId) {
       this.$axios({
         method: 'DELETE',
-        url: `articles/${articleId}`,
-        headers: {
-          Authorization: `Bearer ${window.localStorage.getItem('user-token')}`
-        }
+        url: `articles/${articleId}`
+        // headers: {
+        //   Authorization: `Bearer ${window.localStorage.getItem('user-token')}`
+        // }
       }).then(res => {
         // 删除成功 重新加载当前页码文章
         this.loadArticles(this.page)
