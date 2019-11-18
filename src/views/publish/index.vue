@@ -89,10 +89,19 @@ export default {
       })
     },
     onSubmit (draft) {
-      this.$message({
-        message: '恭喜你，添加成功',
-        type: 'success'
-      })
+      if (this.$route.params.articleId) {
+        // 请求编辑文章
+        this.updateAriticle(draft)
+      } else {
+        // 请求添加文章
+        this.AddArticle(draft)
+      }
+      // this.$message({
+      //   message: '恭喜你，添加成功',
+      //   type: 'success'
+      // })
+    },
+    AddArticle (draft) {
       this.$axios({
         method: 'POST',
         url: '/articles',
@@ -107,11 +116,33 @@ export default {
         data: this.article
       })
         .then(res => {
-          console.log(res, '恭喜添加成功')
+          this.$message({
+            message: '恭喜你，添加成功',
+            type: 'success'
+          })
         })
         .catch(err => {
           console.log(err, '保存失败')
+          this.$message.error('抱歉,添加失败')
         })
+    },
+    updateAriticle (draft) {
+      this.$axios({
+        method: 'PUT',
+        url: `/articles/${this.$route.params.articleId}`,
+        params: {
+          draft
+        },
+        data: this.article
+      }).then(res => {
+        this.$message({
+          message: '恭喜你，更新成功',
+          type: 'success'
+        })
+      }).catch(err => {
+        console.log(err)
+        this.$message.error('更新失败')
+      })
     },
     loadChannels () {
       this.$axios({
