@@ -42,7 +42,8 @@
       </el-header>
       <el-main>
         <!-- 二级路由容器 -->
-        <router-view></router-view>
+        <!-- 加一个key 禁用路由缓存功能 绑定唯一的key  路径不同-->
+        <router-view :key="$route.path"></router-view>
       </el-main>
     </el-container>
   </el-container>
