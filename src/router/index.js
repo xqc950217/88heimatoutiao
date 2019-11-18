@@ -31,6 +31,11 @@ const routes = [
         path: '/publish',
         component: Publish
 
+      },
+      { // 文章编辑
+        path: '/publish/:articleId',
+        component: Publish
+
       }
     ]
   },

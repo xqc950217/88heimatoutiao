@@ -89,7 +89,7 @@
         <template slot-scope="scope">
           <!-- 设置点击事件 -->
           <el-button type="danger" size="mini" @click="onDelete(scope.row.id)">删除</el-button>
-          <el-button type="primary" size="mini">修改</el-button>
+          <el-button type="primary" size="mini" @click="$router.push('/publish/'+scope.row.id)">修改</el-button>
         </template>
       </el-table-column>
     </el-table>

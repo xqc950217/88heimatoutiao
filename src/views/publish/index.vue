@@ -53,7 +53,7 @@ import 'quill/dist/quill.bubble.css'
 // 加载富文本编辑器的核心组件
 import { quillEditor } from 'vue-quill-editor'
 export default {
-  name: 'Publish',
+  name: 'PublishList',
   components: {
     // 注册局部组件
     quillEditor
@@ -75,8 +75,19 @@ export default {
   },
   created () {
     this.loadChannels()
+    if (this.$route.params.articleId) {
+      this.loadArticle()
+    }
   },
   methods: {
+    loadArticle () {
+      this.$axios({
+        method: 'GET',
+        url: `/articles/${this.$route.params.articleId}`
+      }).then(res => {
+        this.article = res.data.data
+      })
+    },
     onSubmit (draft) {
       this.$message({
         message: '恭喜你，添加成功',
