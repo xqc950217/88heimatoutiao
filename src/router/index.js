@@ -6,6 +6,7 @@ import Home from '../views/home/index.vue'
 import Article from '../views/article/index.vue'
 import Publish from '@/views/publish'
 import Comment from '@/views/comment'
+import CommentDetail from '@/views/comment-detail'
 // 加载nprogress
 import Nprogress from 'nprogress'
 Vue.use(VueRouter)
@@ -41,6 +42,11 @@ const routes = [
       {
         path: '/comment',
         component: Comment
+      },
+      {
+        path: '/comment/:articleId',
+        component: CommentDetail,
+        props: true
       }
     ]
   },

@@ -18,9 +18,12 @@
             ></el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
-          <template>
-            <el-button type="primary">修改</el-button>
+         <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button
+              type="primary"
+              @click="$router.push('/comment/' + scope.row.id)"
+            >修改</el-button>
             <el-button type="primary">关闭评论</el-button>
           </template>
         </el-table-column>
@@ -39,7 +42,9 @@
 export default {
   name: 'CommentIndex',
   components: {},
-  props: {},
+  props: {
+
+  },
   data () {
     return {
       articles: [],
@@ -106,5 +111,8 @@ export default {
   .box-card {
     margin-bottom: 20px;
   }
+}
+.el-pagination{
+  text-align: center;
 }
 </style>

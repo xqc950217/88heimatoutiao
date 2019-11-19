@@ -4,7 +4,7 @@
       <div slot="header" class="clearfix">
         <span>全部图文</span>
       </div>
-      <el-form ref="form" :model="form" label-width="80px">
+      <el-form ref="form"  label-width="80px">
         <el-form-item label="文章状态">
           <!-- 单选框组会把选中的radio的label同步给绑定的数据 -->
           <el-radio-group v-model="filterForm.status">
@@ -231,4 +231,8 @@ export default {
     margin-bottom: 20px;
   }
 }
+.el-pagination{
+  text-align: center;
+}
+
 </style>
