@@ -19,6 +19,10 @@
       <el-form-item label="用户邮箱">
         <el-input v-model="user.email"></el-input>
       </el-form-item>
+      <el-form-item label="手机号">
+          <!-- disabled 禁用 -->
+        <el-input disabled v-model="user.mobile"></el-input>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">保存修改</el-button>
       </el-form-item>
@@ -45,7 +49,23 @@ export default {
   },
   methods: {
     onSubmit () {
-      console.log('保存!')
+      this.$axios({
+        method: 'PATCH',
+        url: '/user/profile',
+        data: {
+          name: this.user.name,
+          email: this.user.email,
+          intro: this.user.intro
+        }
+      }).then(res => {
+        this.$message({
+          type: 'success',
+          message: '修改成功'
+        }).catch(err => {
+          console.log(err)
+          this.$message.error('删除失败')
+        })
+      })
     },
     loadUserProfile () {
       this.$axios({
