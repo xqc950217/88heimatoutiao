@@ -2,8 +2,19 @@
   <div>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>卡片名称</span>
-        <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+        <span>素材管理</span>
+        <el-button  type="text"></el-button>
+        <el-upload
+          class="upload-demo  padding: 3px 0"
+          style="float:right"
+          action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
+          :headers="uploadHeaders"
+          name="image"
+          :on-success="onUploadSuccess"
+          :show-file-list="false"
+          >
+          <el-button size="small" type="primary">点击上传</el-button>
+        </el-upload>
       </div>
       <div>
         <el-radio-group v-model="type" @change="onFind">
@@ -43,6 +54,7 @@
 </template>
 
 <script>
+const token = window.localStorage.getItem('user-token')
 export default {
   name: 'MediaIndex',
   comments: {
@@ -54,7 +66,10 @@ export default {
   data () {
     return {
       images: [],
-      type: '全部'
+      type: '全部',
+      uploadHeaders: {
+        Authorization: `Bearer ${token}`
+      }
     }
   },
   computed: {},
@@ -126,6 +141,10 @@ export default {
           message: '已取消删除'
         })
       })
+    },
+    // 上传成功 刷新列表
+    onUploadSuccess () {
+      this.loadImages(this.type !== '全部')
     }
   }
 
