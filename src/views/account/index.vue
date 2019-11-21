@@ -28,10 +28,11 @@
             :show-file-list="false"
             :http-request="onUpload"
             >
-            <!-- <img width="100" src="user.photo" class="avatar" /> -->
+            <!-- <img width="200" src="user.photo" class="avatar" /> -->
             <!-- <i class="el-icon-plus avatar-uploader-icon"></i> -->
-            <img v-if="user.photo" :src="user.photo" class="avatar" />
+            <img width="200" v-if="user.photo" :src="user.photo" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            <p>点击选择上传用户头像</p>
             </el-upload>
       </el-col>
     </el-row>
