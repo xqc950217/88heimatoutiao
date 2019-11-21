@@ -33,7 +33,7 @@
               }"
               @click="onClollect(item)"
               ></i>
-            <i class="el-icon-delete-solid"></i>
+            <i class="el-icon-delete-solid" @click="onDelete(item)"></i>
             </div>
           </el-card>
         </el-col>
@@ -96,6 +96,35 @@ export default {
       }).catch(err => {
         console.log(err)
         this.$message.error('操作失败')
+      })
+    },
+    onDelete (item) {
+      this.$confirm('此操作要永久删除,是否要继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 确认执行
+        this.$axios({
+          method: 'DELETE',
+          url: `/user/images/${item.id}`
+        })
+      }).then(res => {
+        this.$message({
+          type: 'success',
+          message: '删除成功'
+        })
+        // 更新列表
+        this.loadImages(this.type !== '全部')
+      }).catch(err => {
+        console.log(err)
+        this.$message.error('删除失败')
+      }).catch(() => {
+        // 取消执行
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
       })
     }
   }
