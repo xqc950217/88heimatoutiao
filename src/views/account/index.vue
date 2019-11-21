@@ -1,32 +1,40 @@
 <template>
   <div>
-    <el-form ref="form" :model="form" label-width="80px">
-      <el-form-item label="用户头像">
+    <el-row>
+      <el-col :span="10">
+        <el-form ref="form" :model="user" label-width="80px">
+          <el-form-item label="用户昵称">
+            <el-input v-model="user.name"></el-input>
+          </el-form-item>
+          <el-form-item label="个人介绍">
+            <el-input type="textarea" v-model="user.intro"></el-input>
+          </el-form-item>
+          <el-form-item label="用户邮箱">
+            <el-input v-model="user.email"></el-input>
+          </el-form-item>
+          <el-form-item label="手机号">
+            <!-- disabled 禁用 -->
+            <el-input disabled v-model="user.mobile"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit">保存修改</el-button>
+          </el-form-item>
+        </el-form>
+      </el-col>
+      <el-col :offset="1" :span="5">
         <el-upload
-          class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :show-file-list="false">
-          <img width="100" src="user.photo" class="avatar">
-          <!-- <i class="el-icon-plus avatar-uploader-icon"></i> -->
-        </el-upload>
-      </el-form-item>
-      <el-form-item label="用户昵称">
-        <el-input v-model="user.name"></el-input>
-      </el-form-item>
-      <el-form-item label="个人介绍">
-        <el-input type="textarea" v-model="user.intro"></el-input>
-      </el-form-item>
-      <el-form-item label="用户邮箱">
-        <el-input v-model="user.email"></el-input>
-      </el-form-item>
-      <el-form-item label="手机号">
-          <!-- disabled 禁用 -->
-        <el-input disabled v-model="user.mobile"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">保存修改</el-button>
-      </el-form-item>
-    </el-form>
+            class="avatar-uploader"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :show-file-list="false"
+            :http-request="onUpload"
+            >
+            <!-- <img width="100" src="user.photo" class="avatar" /> -->
+            <!-- <i class="el-icon-plus avatar-uploader-icon"></i> -->
+            <img v-if="user.photo" :src="user.photo" class="avatar" />
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -40,7 +48,6 @@ export default {
         mobile: '',
         name: '',
         photo: false
-
       }
     }
   },
@@ -71,11 +78,29 @@ export default {
       this.$axios({
         method: 'GET',
         url: '/user/profile'
+      })
+        .then(res => {
+          this.user = res.data.data
+        })
+        .catch(err => {
+          console.log(err)
+          this.$message.error('获取失败')
+        })
+    },
+    onUpload (config) {
+      // 自定义上传图片
+      const fd = new FormData()
+      fd.append('photo', config.file)
+      this.$axios({
+        method: 'PATCH',
+        url: 'user/photo',
+        data: fd
       }).then(res => {
-        this.user = res.data.data
+        // 更新图片地址
+        this.user.photo = res.data.data.photo
       }).catch(err => {
         console.log(err)
-        this.$message.error('获取失败')
+        this.$message.error('上传失败')
       })
     }
   }
@@ -83,5 +108,4 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
 </style>
