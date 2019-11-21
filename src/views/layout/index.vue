@@ -23,15 +23,15 @@
           <el-menu-item index="/publish">内容发布</el-menu-item>
           <el-menu-item index="/article">内容列表</el-menu-item>
           <el-menu-item index="/comment">评论列表</el-menu-item>
-          <el-menu-item>素材管理</el-menu-item>
+          <el-menu-item index="/media">素材管理</el-menu-item>
         </el-submenu>
         <!-- 二级菜单 -->
         <el-submenu index="2">
           <template slot="title">粉丝管理</template>
-          <el-menu-item>内容发布</el-menu-item>
-          <el-menu-item>内容列表</el-menu-item>
-          <el-menu-item>评论列表</el-menu-item>
-          <el-menu-item>素材管理</el-menu-item>
+          <el-menu-item >内容发布</el-menu-item>
+          <el-menu-item >内容列表</el-menu-item>
+          <el-menu-item >评论列表</el-menu-item>
+          <el-menu-item >素材管理</el-menu-item>
         </el-submenu>
         <el-menu-item>账户信息</el-menu-item>
       </el-menu>
