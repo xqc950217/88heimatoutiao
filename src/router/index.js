@@ -8,6 +8,7 @@ import Publish from '@/views/publish'
 import Comment from '@/views/comment'
 import CommentDetail from '@/views/comment-detail'
 import Media from '@/views/media'
+import Account from '@/views/account'
 // 加载nprogress
 import Nprogress from 'nprogress'
 Vue.use(VueRouter)
@@ -53,7 +54,12 @@ const routes = [
         path: '/media',
         component: Media,
         props: true
+      },
+      {
+        path: '/account',
+        component: Account
       }
+
     ]
   },
   // 一级路由登录页
