@@ -18,14 +18,22 @@
             :options="editorOption"
           ></quill-editor>
         </el-form-item>
-        <!-- <el-form-item label="封面">
-          <el-radio-group>
-            <el-radio label="单图"></el-radio>
-            <el-radio label="三图"></el-radio>
-            <el-radio label="无图"></el-radio>
-            <el-radio label="自动"></el-radio>
+        <el-form-item label="封面">
+          <el-radio-group v-model="article.cover.type">
+            <el-radio :label="1">单图</el-radio>
+            <el-radio :label="3">三图</el-radio>
+            <el-radio :label="0">无图</el-radio>
+            <el-radio :label="-1">自动</el-radio>
           </el-radio-group>
-        </el-form-item>-->
+          <template v-if="article.cover.type>0">
+            <el-row :gutter="20">
+               <el-col :span="4" v-for="item in article.cover.type" :key="item">
+                 <UploadImage></UploadImage>
+               </el-col>
+            </el-row>
+          </template>
+
+        </el-form-item>
         <el-form-item label="频道">
           <el-select v-model="article.channel_id" placeholder="请选择频道">
             <el-option
@@ -52,11 +60,15 @@ import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 // 加载富文本编辑器的核心组件
 import { quillEditor } from 'vue-quill-editor'
+
+// 上传图片
+import UploadImage from './components/upload-image'
 export default {
   name: 'PublishList',
   components: {
     // 注册局部组件
-    quillEditor
+    quillEditor,
+    UploadImage
   },
   data () {
     return {
@@ -64,13 +76,14 @@ export default {
         title: '', // 标题
         content: '', // 内容
         cover: {
-          type: 0,
+          type: 1,
           images: []
         },
-        channel_id: '',
-        channels: [],
-        editorOption: {} // 富文本编辑器配置选项对象
-      }
+        channel_id: ''
+      },
+      channels: [],
+      editorOption: {} // 富文本编辑器配置选项对象
+    //   imageCount:1  //默认是单图
     }
   },
   created () {
@@ -121,8 +134,7 @@ export default {
             type: 'success'
           })
         })
-        .catch(err => {
-          console.log(err, '保存失败')
+        .catch(() => {
           this.$message.error('抱歉,添加失败')
         })
     },
@@ -139,8 +151,7 @@ export default {
           message: '恭喜你，更新成功',
           type: 'success'
         })
-      }).catch(err => {
-        console.log(err)
+      }).catch(() => {
         this.$message.error('更新失败')
       })
     },
@@ -152,14 +163,16 @@ export default {
         .then(res => {
           this.channels = res.data.data.channels
         })
-        .catch(err => {
-          console.log(err, '获取失败')
+        .catch(() => {
+
         })
     }
   }
 }
 </script>
 
-<style scoped lang="less">
-
+<style >
+   .ql-editor {
+  min-height: 300px;
+   }
 </style>
