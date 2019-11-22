@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import eventBus from '@/utils/event-bus'
 export default {
   data () {
     return {
@@ -66,11 +67,12 @@ export default {
           intro: this.user.intro
         }
       }).then(res => {
+        // 更新用户信息成功以后 ,通知头部组件
+        // eventBus.$emit('update-user', this.user)
         this.$message({
           type: 'success',
           message: '修改成功'
-        }).catch(err => {
-          console.log(err)
+        }).catch(() => {
           this.$message.error('删除失败')
         })
       })
@@ -83,8 +85,7 @@ export default {
         .then(res => {
           this.user = res.data.data
         })
-        .catch(err => {
-          console.log(err)
+        .catch(() => {
           this.$message.error('获取失败')
         })
     },
@@ -99,8 +100,9 @@ export default {
       }).then(res => {
         // 更新图片地址
         this.user.photo = res.data.data.photo
-      }).catch(err => {
-        console.log(err)
+        // 更新用户信息成功以后 ,通知头部组件
+        eventBus.$emit('update-user', this.user)
+      }).catch(() => {
         this.$message.error('上传失败')
       })
     }

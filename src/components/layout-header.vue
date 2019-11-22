@@ -27,6 +27,8 @@
 </template>
 
 <script>
+// 头部组件中使用eventbus订阅一个自定义事件
+import eventBus from '@/utils/event-bus'
 export default {
   data () {
     return {
@@ -38,6 +40,11 @@ export default {
   },
   created () {
     this.loadUser()
+    // 在初始化中监听自定义事件
+    eventBus.$on('update-user', user => {
+      this.user.name = user.name
+      this.user.photo = user.photo
+    })
   },
   methods: {
     onLogout () {
